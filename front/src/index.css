@@ -1,0 +1,38 @@
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  video::-webkit-media-controls {
+    display: none;
+  }
+
+  video::-webkit-media-controls-play-button {
+    display: none;
+  }
+
+  video::-webkit-media-controls-volume-slider {
+    display: none;
+  }
+
+  video::-webkit-media-controls-mute-button {
+    display: none;
+  }
+
+  video::-webkit-media-controls-timeline {
+    display: none;
+  }
+
+  video::-webkit-media-controls-current-time-display {
+    display: none;
+  }
+}
+
+.fixed-sidebar {
+  @apply fixed top-0 left-0 h-full transition-transform duration-300;
+}
+.translate-x-full {
+  transform: translateX(-100%);
+}
+
