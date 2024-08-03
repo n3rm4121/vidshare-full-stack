@@ -18,10 +18,9 @@ const Notification = () => {
    
     dispatch(markNotificationsRead());
   };
-console.log(notifications)
   return (
     <div className="relative">
-      <div className=" z-50 absolute right-0 top-16 md:w-1/3 bg-gray-200 border-black border-4 rounded-lg shadow-lg text-lg">
+      <div className=" z-50 absolute right-0 top-10 md:w-1/3 bg-gray-200 border-black border-4 rounded-lg shadow-lg text-lg">
         <div className="p-2 flex items-center justify-between">
           <span>Notifications ({unreadCount})</span>
           <button 

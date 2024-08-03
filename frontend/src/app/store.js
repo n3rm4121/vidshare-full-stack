@@ -10,6 +10,7 @@ const store = configureStore(
             videos: videosReducer,
             menu: menuReducer,
             notifications: notificationReducer,
+            devTools: process.env.NODE_ENV !== 'production',
         },
 
     }

@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { CiSearch } from "react-icons/ci";
-
-const SearchBar = ({ onSearch }) => {
+import {useNavigate} from 'react-router-dom';
+const SearchBar = () => {
+  const navigate = useNavigate();
   const [query, setQuery] = useState('');
 
   const handleInputChange = (e) => {
@@ -9,21 +10,8 @@ const SearchBar = ({ onSearch }) => {
   };
 
   const handleSearch = () => {
-    onSearch(query);
+    navigate(`/search?q=${query}`);
   };
-
-  // const handleKeyUp = useCallback((e) => {
-  //   if (e.key === 'Enter' && query) {
-  //     handleSearch();
-  //   }
-  // }, [handleSearch]);
-
-  // useEffect(() => {
-  //   window.addEventListener('keyup', handleKeyUp);
-  //   return () => {
-  //     window.removeEventListener('keyup', handleKeyUp);
-  //   };
-  // }, [handleKeyUp]);
 
   return (
     <div className="search-bar flex items-center border-2 rounded-lg p-1">

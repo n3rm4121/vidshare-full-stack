@@ -4,7 +4,7 @@ import { FiMoreVertical } from "react-icons/fi";
 import moment from 'moment';
 import { useSelector } from 'react-redux';
 import axiosInstance from '../../utils/axiosInstance';
-import { FaRegUser } from 'react-icons/fa';
+import Avatar from '../Avatar'
 
 function CommentLayout({ comment, setComments }) {
   const user = useSelector(state => state.user.user);
@@ -59,14 +59,7 @@ function CommentLayout({ comment, setComments }) {
   return (
     <li className="flex items-start justify-between bg-white shadow-lg rounded-lg p-4 mb-4 border border-gray-200">
       <div className="flex items-start space-x-4">
-      {comment.owner?.avatar ? ( 
-        <img src={comment.owner.avatar} alt={comment.owner.username} className="w-10 h-10 rounded-full" />
-      ):(
-        <div className="w-10 h-10 bg-gray-300 rounded-full flex justify-center items-center">
-          <FaRegUser size={25} />
-        </div>
-      )
-        }
+      <Avatar user={comment.owner} type='medium' />
         <div>
           <p className="font-semibold text-gray-800">@{comment.owner?.username}
             <span className="ml-1 text-gray-500 text-sm">{moment(comment.createdAt).fromNow()}</span>

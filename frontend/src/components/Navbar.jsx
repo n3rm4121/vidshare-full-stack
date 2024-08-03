@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Link, NavLink, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { FaRegUser, FaBars } from 'react-icons/fa';
 import { RiVideoUploadLine } from 'react-icons/ri';
 import { IoNotifications } from 'react-icons/io5';
@@ -55,10 +55,7 @@ const Navbar = ({ toggleMenu }) => {
     dispatch(getCurrentUser());
   }, [dispatch]);
 
-  const handleSearch = (query) => {
-    navigate(`/search?q=${query}`);
-  };
-
+  
   const handleProfileNavigation = () => {
     if (currentUser) {
       navigate(`/c/${currentUser.username}`);
@@ -91,45 +88,37 @@ const Navbar = ({ toggleMenu }) => {
               <FaBars size={24} />
             </div>
           </button>
-          <Link to="/" className="text-4xl font-bold text-teal-700">
+          <Link to="/" className="text-2xl sm:text-4xl font-bold text-primary">
             VidShare
           </Link>
         </div>
 
-        <div>
-          <SearchBar onSearch={handleSearch} />
+        <div className='hidden sm:hidden md:block lg:block  md:px-5 lg:px-5'>
+          <SearchBar/>
         </div>
 
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-2 sm:gap-4">
           <div
-            className="flex items-center gap-2 border rounded-lg p-3 bg-teal-500 text-white font-semibold cursor-pointer"
+            className="flex items-center gap-1 sm:gap-2 border rounded-lg p-2 sm:p-3 bg-teal-500 text-white font-semibold cursor-pointer"
             onClick={toggleForm}
           >
-            <RiVideoUploadLine size={25} />
-            <span className="hidden md:block">Upload Video</span>
+            <RiVideoUploadLine size={30}/>
+            <span className="hidden sm:block text-sm sm:text-base">Upload</span>
           </div>
-          <div className="relative p-2 rounded-full cursor-pointer" onClick={toggleNotification} ref={notificationRef}>
-            <IoNotifications size={25} />
+          <div className="relative p-1 sm:p-2 rounded-full cursor-pointer" onClick={toggleNotification} ref={notificationRef}>
+            <IoNotifications size={30} />
             {unreadNotificationsCount > 0 && (
-              <span className="absolute top-0 right-0 inline-block w-4 h-4 text-xs text-center text-white bg-red-600 rounded-full">
+              <span className="absolute top-0 right-0 inline-block w-3 sm:w-4 h-3 sm:h-4 text-xs text-center text-white bg-red-600 rounded-full">
                 {unreadNotificationsCount}
               </span>
             )}
           </div>
-          <div onClick={toggleUserDialog} className="relative cursor-pointer mr-6" ref={toggleRef}>
-            <Avatar user={currentUser} type="medium" />
+          <div onClick={toggleUserDialog} className="relative cursor-pointer mr-4 sm:mr-6" ref={toggleRef}>
+            <Avatar user={currentUser} type="medium"/>
             {isUserDialogOpen && (
-              <div className="absolute right-0 top-16 w-52 bg-gray-200 border rounded-lg shadow-lg z-10 text-lg" ref={profileRef}>
+              <div className="absolute right-0 top-10 sm:top-16 w-40 sm:w-52 bg-gray-200 border rounded-lg shadow-lg z-10 text-sm sm:text-lg" ref={profileRef}>
                 <div className="p-2 flex items-center gap-4">
-                  {currentUser?.avatar ? (
-                    <img
-                      src={currentUser.avatar}
-                      alt="Profile"
-                      className="w-12 h-12 rounded-full"
-                    />
-                  ) : (
-                    <FaRegUser size={25} />
-                  )}
+                  <Avatar user={currentUser} type="medium" />
                   <div>
                     <span>{currentUser?.fullname}</span>
                     <p>@{currentUser?.username}</p>

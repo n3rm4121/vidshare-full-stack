@@ -73,14 +73,14 @@ function SignIn() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col md:flex-row justify-around bg-gray-200 px-8 md:px-20">
-      <div className="flex flex-col items-center justify-center w-full p-8 md:p-12 md:w-1/2">
-        <h1 className="text-6xl font-bold mb-4 text-primary">VidShare</h1>
+    <div className="min-h-screen flex flex-col md:flex-row  bg-gray-200 px-8 md:px-20">
+      <div className="flex flex-col items-center justify-center lg:ml-36 w-full p-4 md:p-6 md:w-1/2">
+      <h1 className="text-6xl font-bold mb-4 text-primary">VidShare</h1>
         <p className="text-xl text-black">Share your favorite videos with the world.</p>
       </div>
-      <div className="flex flex-col justify-center items-center w-full p-8 md:p-12 md:w-1/2">
-        <div className="bg-white p-8 rounded-xl shadow-md w-full max-w-md">
-          <h1 className="text-2xl font-bold mb-6 text-center">{isLogin ? 'Login' : 'Signup'}</h1>
+      <div className="flex flex-col justify-center items-center w-full p-4 md:p-6 md:w-1/2 lg:mr-36">
+      <div className="bg-white p-6 rounded-xl shadow-lg w-full max-w-md">
+      <h1 className="text-2xl font-bold mb-6 text-center">{isLogin ? 'Login' : 'Signup'}</h1>
           <form onSubmit={handleSubmit} className="space-y-4">
             {!isLogin && (
               <div>

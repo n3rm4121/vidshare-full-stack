@@ -35,7 +35,7 @@ const notificationSlice = createSlice({
             state.error = action.error.message;
           })
           .addCase(markNotificationsRead.fulfilled, (state) => {
-            state.notifications.forEach((notification) => {
+            state.notifications?.forEach((notification) => {
               notification.isRead = true;
             });
           });
@@ -44,8 +44,9 @@ const notificationSlice = createSlice({
 })
 
 // Selector to get unread notifications count
-export const selectUnreadNotificationsCount = (state) =>
-  state.notifications.notifications.filter((notification) => !notification.isRead).length;
+ export const selectUnreadNotificationsCount = (state) => {
+  return state.notifications?.notifications?.filter((notification) => !notification.isRead).length;
+}
 
 
 

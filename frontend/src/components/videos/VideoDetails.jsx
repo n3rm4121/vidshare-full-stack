@@ -139,34 +139,38 @@ const navigate = useNavigate();
   const profileUrl = `/c/${video.owner.username}`;
   return (
     <div className='flex flex-col'>
-      <div className='text-3xl font-semibold mb-3'>
+      <div className='lg:text-3xl md:text-2xl sm:text-2xl font-semibold mb-3'>
         {video.title}
       </div>
 
       <div className="flex items-center gap-4 mb-4">
-           <Avatar user={video.owner} type='medium' />
+      
+      <div className='w-10 h-10'>
+      <Avatar user={video.owner} type='medium'/>
 
-        <div className="flex flex-col">
-          <h1 onClick={() => navigate(profileUrl)} className="text-xl cursor-pointer">{video.owner.fullname}</h1>
+      </div>
+
+        <div className="flex flex-col ">
+          <h1 onClick={() => navigate(profileUrl)} className="lg:text-xl md:text-lg sm:text-sm cursor-pointer">{video.owner.fullname}</h1>
           <h1 className="text-gray-700">{subscribersCount} subscribers</h1>
         </div>
         {
           user?._id === video.owner._id ? null : (
-            <button onClick={handleSubscription} className={`px-4 py-3 rounded-full ${subscribed ? 'bg-red-500 text-white hover:bg-red-600' : 'bg-orange-500 hover:bg-orange-600 text-white'}`}>
+            <button onClick={handleSubscription} className={` px-3 py-2 md:px-4 md:py-3 rounded-full sm:text-xs ${subscribed ? 'bg-red-500 text-white hover:bg-red-600' : 'bg-orange-500 hover:bg-orange-600 text-white'}`}>
                         {subscribed ? 'Unsubscribe' : 'Subscribe'}
                     </button>
           )
         }
        
         <div className="flex items-center gap-4 ml-auto">
-          <div className="flex items-center  bg-gray-100 rounded-full px-3 py-2 gap-4">
+          <div className="flex items-center lg:text-3xl md:text-3xl sm:text-xl  bg-gray-100 rounded-full px-3 py-2 gap-4">
             <button onClick={handleLike} className="transition-all duration-100 ease-linear hover:scale-125 flex items-center">
-              {isLiked ? <BiSolidLike className=" text-3xl" /> : <BiLike className="text-3xl" />}
+              {isLiked ? <BiSolidLike className=" text-3xl" /> : <BiLike className="" />}
               <span className="ml-2">{likeCount}</span>
             </button>
             <span className='text-gray-400'>|</span>
             <button onClick={handleDislike} className="transition-all duration-100 ease-linear hover:scale-125 flex items-center">
-              {isDisliked ? <BiSolidDislike className="text-3xl" /> : <BiDislike className="text-3xl" />}
+              {isDisliked ? <BiSolidDislike /> : <BiDislike />}
               <span className="ml-2">{dislikeCount}</span>
             </button>
           </div>
@@ -174,7 +178,7 @@ const navigate = useNavigate();
       </div>
 
       {/* views and description */}
-      <div className=' bg-gray-200 rounded-lg p-4'>
+      <div className=' bg-gray-200 rounded-lg p-4 lg:text-xl md:text-lg sm:text-xs'>
         <div>
           {video.views} views<LuDot className='inline px-0 mx-0' />{moment(video.createdAt).fromNow()}
         </div>

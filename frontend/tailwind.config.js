@@ -7,7 +7,7 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['Roboto', 'ui-sans-serif', 'system-ui'],
+        sans: ['Helvetica Neue', 'Arial'],
       },
       colors: {
         primary: 'teal',

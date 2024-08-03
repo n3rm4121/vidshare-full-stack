@@ -248,7 +248,7 @@ const updateUserAvatar = asyncHandler(async (req, res) => {
         req.user?._id,
         {
             $set: {
-                avatar: avatar.url
+                avatar: avatar.url.replace('http', 'https')
             }
         },
         { new: true }
@@ -286,7 +286,7 @@ const updateUserCoverImage = asyncHandler(async (req, res) => {
         req.user?._id,
         {
             $set: {
-                coverImage: coverImage.url
+                coverImage: coverImage.url.replace('http', 'https')
             }
         },
         { new: true }

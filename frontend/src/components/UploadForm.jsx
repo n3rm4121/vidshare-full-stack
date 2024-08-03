@@ -61,7 +61,6 @@ const UploadForm = ({ handleCloseDialog }) => {
 
   const handleUploadVideo = async (e) => {
     e.preventDefault();
-    console.log("clicked")
     if (!validateForm()) {
       return;
     }

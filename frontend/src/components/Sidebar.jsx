@@ -6,6 +6,7 @@ import { CgProfile } from "react-icons/cg";
 import { useSelector, useDispatch } from 'react-redux';
 import { logout, fetchSubscriptions } from '../features/UserSlice';
 import Avatar from '../components/Avatar';
+import SearchBar from './Search';
 // fix: subscription on sidebar refetch on every unsubscribe action
 const Sidebar = ({ isMenuOpen }) => {
   const dispatch = useDispatch();
@@ -44,8 +45,13 @@ const Sidebar = ({ isMenuOpen }) => {
   };
 
   return (
-    <div className={`fixed top-20 left-0 z-50 transition-transform duration-300 ${isMenuOpen ? 'transform translate-x-0' : 'transform -translate-x-full'} w-60 h-full bg-white shadow-lg`}>
+    <div className={`fixed pt-20 left-0 z-50 transition-transform duration-300 ${isMenuOpen ? 'transform translate-x-0' : 'transform -translate-x-full'} w-60 h-full bg-white shadow-lg`}>
       <div className="flex flex-col h-full p-4">
+
+      <div className="sm:block md:hidden lg:hidden">
+        <SearchBar />
+      </div>
+   
         <nav className="mt-2 flex flex-col space-y-2">
           <NavLink
             to="/"

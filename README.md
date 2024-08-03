@@ -25,3 +25,68 @@ VidShare is a full-stack video-sharing platform built with the MERN stack (Mongo
     -   Express.js
     -   MongoDB
     -   Mongoose for MongoDB object modeling
+    -   Cloudinary for storage
+
+
+## Project Setup
+
+To set up the VidShare project, follow these steps:
+
+1. Clone the repository to your local machine:
+    ```
+    git clone https://github.com/n3rmal/vidshare-full-stack.git
+    ```
+
+2. Navigate to the project directory:
+    ```
+    cd vidshare-full-stack
+    ```
+
+3. Install the dependencies for the frontend:
+    ```
+    cd frontend
+    npm i
+    ```
+
+4. Install the dependencies for the backend:
+    ```
+    cd ../backend
+    npm i
+    ```
+
+5. Create a `.env` file in the `backend` directory and add the following environment variables:
+    ```
+PORT=8000
+MONGODB_URI=<yourmongodburi>
+CORS_ORIGIN=http://localhost:5173
+ACCESS_TOKEN_SECRET=<yourAccessToken>
+ACCESS_TOKEN_EXPIRY=1d
+REFRESH_TOKEN_SECRET=<yourRefreshToken>
+REFRESH_TOKEN_EXPIRY=10d
+CLOUDINARY_CLOUD_NAME=<yourCloudinaryCloudName>
+CLOUDINARY_API_KEY=<yourapikey>
+CLOUDINARY_API_SECRET=<yoursecret>
+
+    ```
+
+6. Start the frontend development server:
+    ```
+    cd ../frontend
+    npm run dev
+    ```
+
+7. Start the backend server:
+    ```
+    cd ../backend
+    npm run dev
+    ```
+
+8. Open your browser and navigate to `http://localhost:5173` to access the VidShare application.
+
+That's it! You have successfully set up the VidShare project on your local machine.
+
+
+## Contact
+
+For any questions or suggestions, feel free to reach out to me via twitter or linkedin.
+

@@ -28,7 +28,7 @@ const getVideoComments = asyncHandler(async(req, res) => {
             .sort({createdAt: -1})
             .skip( (page -1) * limit )            // how much document to skip
             .limit(limit)
-            .populate('owner', 'username avatar');
+            .populate('owner', 'username avatar fullname');
 
     const numberOfComments = await Comment.countDocuments({ video: videoId });
     // if (!comments || comments.length === 0){

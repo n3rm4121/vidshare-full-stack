@@ -1,14 +1,11 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import axios from 'axios';
-import config from "../config";
 import axiosInstance from "../utils/axiosInstance";
 
-// Async thunk for login
 export const login = createAsyncThunk(
   'user/login',
   async (userCredentials, { rejectWithValue }) => {
     try {
-      const response = await axios.post(`${config.hostname}/api/v1/users/login`, userCredentials);
+      const response = await axiosInstance.post('/users/login', userCredentials);
       const { accessToken, refreshToken } = response.data.data;
 
       localStorage.setItem('accessToken', accessToken);
@@ -72,12 +69,11 @@ export const fetchDislikedVideos = createAsyncThunk(
   }
 );
 
-// Async thunk for sign up
 export const signUp = createAsyncThunk(
   'user/signUp',
   async (userDetails, { rejectWithValue }) => {
     try {
-      const response = await axios.post(`${config.hostname}/api/v1/users/register`, userDetails);
+      const response = await axiosInstance.post('/users/register', userDetails);
       return response.data.data;
     } catch (error) {
       if (!error.response) {
@@ -118,17 +114,11 @@ export const deleteUserVideo = createAsyncThunk(
   }
 );
 
-// Async thunk for getting current user
 export const getCurrentUser = createAsyncThunk(
   'user/getUser',
   async (_, { rejectWithValue }) => {
     try {
-      const accessToken = localStorage.getItem('accessToken');
-      const response = await axios.get(`${config.hostname}/api/v1/users/current-user`, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        },
-      });
+      const response = await axiosInstance.get('/users/current-user');
       return response.data.data;
     } catch (error) {
       if (!error.response) {
@@ -138,6 +128,7 @@ export const getCurrentUser = createAsyncThunk(
     }
   }
 );
+
 export const uploadVideo = createAsyncThunk(
   'videos/uploadVideo',
   async (formData, { rejectWithValue }) => {
