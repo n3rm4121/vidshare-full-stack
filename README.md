@@ -84,9 +84,3 @@ CLOUDINARY_API_SECRET=<yoursecret>
 8. Open your browser and navigate to `http://localhost:5173` to access the VidShare application.
 
 That's it! You have successfully set up the VidShare project on your local machine.
-
-
-## Contact
-
-For any questions or suggestions, feel free to reach out to me via ![Twitter](https://x.com/n3rma121) or ![Linkedin](https://linkedin.com/in/n3rma121).
-
