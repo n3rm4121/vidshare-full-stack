@@ -55,7 +55,8 @@ To set up the VidShare project, follow these steps:
     ```
 
 5. Create a `.env` file in the `backend` directory and add the following environment variables:
-    ```
+
+```
 PORT=8000
 MONGODB_URI=<yourmongodburi>
 CORS_ORIGIN=http://localhost:5173
@@ -66,8 +67,7 @@ REFRESH_TOKEN_EXPIRY=10d
 CLOUDINARY_CLOUD_NAME=<yourCloudinaryCloudName>
 CLOUDINARY_API_KEY=<yourapikey>
 CLOUDINARY_API_SECRET=<yoursecret>
-
-    ```
+```
 
 6. Start the frontend development server:
     ```
@@ -88,5 +88,5 @@ That's it! You have successfully set up the VidShare project on your local machi
 
 ## Contact
 
-For any questions or suggestions, feel free to reach out to me via twitter or linkedin.
+For any questions or suggestions, feel free to reach out to me via ![Twitter](https://x.com/n3rma121) or ![Linkedin](https://linkedin.com/in/n3rma121).
 
