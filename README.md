@@ -5,6 +5,7 @@ VidShare is a full-stack video-sharing platform built with the MERN stack (Mongo
 
 ## Features
 
+-   **Email Verification**: Users must verify their email addresses upon signup to be able to login.
 -   **Video Upload and Management**: Users can upload their videos, which are then stored and managed in the platform.
 -   **Video Playback**: Users can view videos on the platform with a modern, responsive player.
 -   **Search Functionality**: Search for videos based on keywords and filter results.
@@ -67,6 +68,12 @@ REFRESH_TOKEN_EXPIRY=10d
 CLOUDINARY_CLOUD_NAME=<yourCloudinaryCloudName>
 CLOUDINARY_API_KEY=<yourapikey>
 CLOUDINARY_API_SECRET=<yoursecret>
+
+# Email service configuration
+EMAIL_USERNAME = yourEmailUsername
+EMAIL_PASSWORD = yourAppPassword
+EMAIL_PORT = 465
+EMAIL_HOST = smtp.gmail.com 
 ```
 
 6. Start the frontend development server:
