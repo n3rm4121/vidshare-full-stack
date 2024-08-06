@@ -63,7 +63,7 @@ function SignIn() {
           setUsername('');
           setPassword('');
           setConfirmPassword('');
-          setSuccessMessage('Signup successful! You can now login.');
+          setSuccessMessage('Signup succesfull! Verify your email to login.');
           setTimeout(() => {
             setSuccessMessage('');
           }, 2000);

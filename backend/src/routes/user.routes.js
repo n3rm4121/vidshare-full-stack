@@ -14,7 +14,8 @@ import {
     updateUserAvatar, 
     updateUserCoverImage, 
     updateWatchHistory,
-    deleteWatchHistory
+    deleteWatchHistory,
+    verifyToken
 } from "../controllers/user.controller.js";
 
 import { upload } from "../middlewares/multer.middleware.js";
@@ -52,4 +53,6 @@ router.route("/update-watch-history").post(verifyJWT, updateWatchHistory)
 router.route("/c/:username/videos").get(verifyJWT, getUserVideos)
 
 router.route("/delete-account").delete(verifyJWT, deleteUserAccount)
+
+router.route("/verify/:userId/:token").post(verifyToken)
 export default router

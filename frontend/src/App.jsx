@@ -4,8 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import Home from './pages/Home';
 import SignIn from './pages/SignIn';
 import MainLayout from './components/MainLayout';
-import { getCurrentUser, setUser } from './features/UserSlice';
-// import Videos from './pages/Videos';
+import { getCurrentUser } from './features/UserSlice';
 import SinglepageVideo from './pages/SinglepageVideo';
 import PageNotFound from './pages/PageNotFound';
 import UserSettings from './pages/UserSettings';
@@ -14,6 +13,7 @@ import SearchPage from './pages/SearchResults';
 import Subscriptions from './pages/Subscriptions';
 import WatchHistory from './pages/WatchHistory';
 import LikedVideos from './pages/LikedVideos';
+import EmailVerify from './components/EmailVerify'
 
 // ProtectedRoute component
 const ProtectedRoute = ({ children }) => {
@@ -45,6 +45,8 @@ useEffect(() => {
     <Router>
       <Routes>
         <Route path="/login" element={<SignIn />} />
+
+        <Route path="user/verify/:userId/:token" element={<EmailVerify />} />
         
         <Route path="/" element={
           <ProtectedRoute>

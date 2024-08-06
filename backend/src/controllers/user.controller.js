@@ -6,9 +6,10 @@ import { ApiResponse } from '../utils/ApiResponse.js';
 import jwt from 'jsonwebtoken';
 import deleteMediaFromCloud from '../utils/deleteMediaFromCloud.js';
 import { Video } from '../models/video.model.js';
-import mongoose, { isValidObjectId } from 'mongoose';
-const { ObjectId } = mongoose.Types;
-
+import { isValidObjectId } from 'mongoose';
+import { Token } from '../models/token.model.js';
+import sendEmail from '../utils/sendEmail.js';
+import crypto from 'crypto';
 
 const generateAccessAndRefreshTokens = async (userId) => {
     try {
@@ -25,8 +26,40 @@ const generateAccessAndRefreshTokens = async (userId) => {
     }
 };
 
+const verifyToken = asyncHandler(async (req, res) => {
+    const { userId, token } = req.params;
+
+    if (!userId || !token) {
+        throw new ApiError(400, "Invalid token");
+    }
+
+    const isTokenExists = await Token.findOne({
+        userId: userId,
+        token: token,
+        type: "emailVerification",
+        expires: { $gt: Date.now() }
+    });
+
+    if (!isTokenExists) {
+        return res.status(200).json(new ApiResponse(200, {}, "Invalid or expired token"));
+    }
+
+    const user = await User.findById(userId);
+    if (!user) {
+        throw new ApiError(400, "User not found");
+    }
+
+    user.isVerified = true;
+    await user.save();
+
+    await Token.deleteOne({ userId: userId, token: token });
+
+    console.log("Verified user:", user);
+    res.status(200).json(new ApiResponse(200, { user }, "Email verified successfully"));
+});
+
+
 const registerUser = asyncHandler(async (req, res) => {
-    console.log(req.body)
     const { fullname, email, username, password } = req.body;
 
     if ([fullname, email, username, password].some((field) => field?.trim() === "")) {
@@ -41,17 +74,35 @@ const registerUser = asyncHandler(async (req, res) => {
 
     const user = await User.create({ fullname, email, password, username });
 
-    const createdUser = await User.findById(user._id).select("-password -refreshToken");
+    const token = await new Token({
+        userId: user._id,
+        email: user.email,
+        token: crypto.randomBytes(32).toString("hex"),
+        type: "emailVerification",
+        expires: Date.now() + 24 * 60 * 60 * 1000 // 24 hours
+        
+    }).save();
 
-    if (!createdUser) {
-        throw new ApiError(500, "Something went wrong while registering the user");
-    }
+    // Send email verification link
+    const verificationLink = `${process.env.CORS_ORIGIN}/user/verify/${user._id}/${token.token}`;
 
-    return res.status(201).json(new ApiResponse(200, createdUser, "User registered Successfully"));
+    await sendEmail({
+        email: user.email,
+        subject: "Welcome to VidShare - Verify your email",
+        message: `Thank you for signing up. Click this link to verify your email: ${verificationLink}`
+    });
+
+    return res.status(201).json(new ApiResponse(201, {}, "User registered successfully. Please verify your email"));
 });
 
 const loginUser = asyncHandler(async (req, res) => {
+
     const { email, username, password } = req.body;
+
+    const isVerifiedUser = await User.findOne({ $or: [{ email }, { username }] });
+    if(!isVerifiedUser.isVerified){
+        return res.status(400).json(new ApiResponse(400, {}, "Please verify your email"));
+    }
 
     if (!(username || email)) {
         throw new ApiError(400, "username or email is required");
@@ -78,7 +129,7 @@ const loginUser = asyncHandler(async (req, res) => {
     // for sending cookies 
     const options = {
         httpOnly: true,
-        secure: false // true for production
+        secure: true // true for production
     };
 
     return res
@@ -610,4 +661,4 @@ const deleteUserAccount = asyncHandler(async (req, res) => {
     return res.status(200).json({ message: "User account and all related data deleted successfully" });
 })
 
-export { registerUser, loginUser, logoutUser, refreshAccessToken, changeCurrentPassword, getCurrentUser, updateAccountDetails, updateUserAvatar, updateUserCoverImage, getUserChannelProfile, getWatchHistory, updateWatchHistory, getUserVideos, deleteUserAccount, deleteWatchHistory };
+export { registerUser, loginUser, logoutUser, refreshAccessToken, changeCurrentPassword, getCurrentUser, updateAccountDetails, updateUserAvatar, updateUserCoverImage, getUserChannelProfile, getWatchHistory, updateWatchHistory, getUserVideos, deleteUserAccount, deleteWatchHistory, verifyToken };
