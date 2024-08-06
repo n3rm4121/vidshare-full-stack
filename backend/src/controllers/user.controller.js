@@ -99,11 +99,6 @@ const loginUser = asyncHandler(async (req, res) => {
 
     const { email, username, password } = req.body;
 
-    const isVerifiedUser = await User.findOne({ $or: [{ email }, { username }] });
-    if(!isVerifiedUser.isVerified){
-        return res.status(400).json(new ApiResponse(400, {}, "Please verify your email"));
-    }
-
     if (!(username || email)) {
         throw new ApiError(400, "username or email is required");
     }
@@ -121,7 +116,11 @@ const loginUser = asyncHandler(async (req, res) => {
     if (!isPasswordValid) {
         return res.status(404).json(new ApiResponse(404, {}, "Incorrect Email or Password"));
     }
-
+    
+  const isVerifiedUser = await User.findOne({ $or: [{ email }, { username }] });
+    if(!isVerifiedUser.isVerified){
+        return res.status(400).json(new ApiResponse(400, {}, "Please verify your email"));
+    }
     const { accessToken, refreshToken } = await generateAccessAndRefreshTokens(user._id);
 
     const loggedInUser = await User.findById(user._id).select("-password -refreshToken");
