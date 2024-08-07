@@ -61,8 +61,8 @@ function CommentLayout({ comment, setComments }) {
       <div className="flex items-start space-x-4">
       <Avatar user={comment.owner} type='medium' />
         <div>
-          <p className="font-semibold text-gray-800">@{comment.owner?.username}
-            <span className="ml-1 text-gray-500 text-sm">{moment(comment.createdAt).fromNow()}</span>
+          <p className="font-semibold text-sm text-gray-800">@{comment.owner?.username}
+            <span className="ml-1 text-gray-500 text-xs">{moment(comment.createdAt).fromNow()}</span>
           </p>
           {isEditing ? (
             <div>
