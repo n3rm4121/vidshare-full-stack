@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
-import { baseURL } from '../utils/axiosInstance';
-
+const baseURL = import.meta.env.VITE_REACT_APP_BASE_URL;
 
 const VerifyEmail = () => {
     const { userId, token } = useParams();
