@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { FaRegUser, FaBars } from 'react-icons/fa';
+import { FaBars } from 'react-icons/fa';
 import { RiVideoUploadLine } from 'react-icons/ri';
 import { IoNotifications } from 'react-icons/io5';
 import { useSelector, useDispatch } from 'react-redux';
@@ -14,6 +14,8 @@ import { selectUnreadNotificationsCount, fetchNotifications } from '../features/
 
 
 const Navbar = ({ toggleMenu }) => {
+  const uploadStatus = useSelector(state => state.user.uploadStatus);
+  const isLoading = uploadStatus.loading;
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [isUserDialogOpen, setIsUserDialogOpen] = useState(false);
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
@@ -80,33 +82,34 @@ const Navbar = ({ toggleMenu }) => {
   }, []);
 
   return (
-    <nav className="bg-white shadow-sm py-4 px-4 z-50">
+    <nav className="bg-white shadow-sm z-50 py-2">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <button onClick={toggleMenu} className="text-gray-600 focus:outline-none">
             <div className="p-3 rounded-full hover:bg-gray-200">
-              <FaBars size={24} />
+              <FaBars size={20} />
             </div>
           </button>
-          <Link to="/" className="text-2xl sm:text-4xl font-bold text-primary">
+          <Link to="/" className="text-2xl font-bold text-primary">
             VidShare
           </Link>
         </div>
 
-        <div className='hidden sm:hidden md:block lg:block  md:px-5 lg:px-5'>
+        <div className='hidden sm:hidden md:block lg:block '>
           <SearchBar/>
         </div>
 
         <div className="flex items-center gap-2 sm:gap-4">
           <div
-            className="flex items-center gap-1 sm:gap-2 border rounded-lg p-2 sm:p-3 bg-teal-500 text-white font-semibold cursor-pointer"
+             className={`flex items-center gap-1 sm:gap-2 border rounded-lg p-2 text-primary border-primary hover:bg-primary hover:text-white font-semibold cursor-pointer 
+            ${isLoading ? 'opacity-50 pointer-events-none' : ''}`}
             onClick={toggleForm}
           >
-            <RiVideoUploadLine size={30}/>
+            <RiVideoUploadLine size={25}/>
             <span className="hidden sm:block text-sm sm:text-base">Upload</span>
           </div>
           <div className="relative p-1 sm:p-2 rounded-full cursor-pointer" onClick={toggleNotification} ref={notificationRef}>
-            <IoNotifications size={30} />
+            <IoNotifications size={25} />
             {unreadNotificationsCount > 0 && (
               <span className="absolute top-0 right-0 inline-block w-3 sm:w-4 h-3 sm:h-4 text-xs text-center text-white bg-red-600 rounded-full">
                 {unreadNotificationsCount}
@@ -116,7 +119,7 @@ const Navbar = ({ toggleMenu }) => {
           <div onClick={toggleUserDialog} className="relative cursor-pointer mr-4 sm:mr-6" ref={toggleRef}>
             <Avatar user={currentUser} type="medium"/>
             {isUserDialogOpen && (
-              <div className="absolute right-0 top-10 sm:top-16 w-40 sm:w-52 bg-gray-200 border rounded-lg shadow-lg z-10 text-sm sm:text-lg" ref={profileRef}>
+              <div className="absolute right-0 top-10 sm:top-16 w-96 bg-gray-200 border rounded-lg shadow-lg z-10 text-sm sm:text-lg " ref={profileRef}>
                 <div className="p-2 flex items-center gap-4">
                   <Avatar user={currentUser} type="medium" />
                   <div>
