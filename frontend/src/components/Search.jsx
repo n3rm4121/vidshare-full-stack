@@ -10,6 +10,7 @@ const SearchBar = () => {
   };
 
   const handleSearch = () => {
+    if(!query) return;
     navigate(`/search?q=${query}`);
   };
 
