@@ -10,7 +10,7 @@ const userSchema = new Schema(
         required: [true, 'Username is required'],
         lowercase: true,
         trim: true,
-        index: true         // for searching in optimize way
+        index: true        // for searching in optimize way
     },
     email: {
         type: String,
@@ -18,11 +18,13 @@ const userSchema = new Schema(
         unique: true,
         lowercase: true,
         trim: true,
+        index: true,
+        match: [/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/, 'Please fill a valid email address'],
+        maxLength: 50
     },
     fullname: {
         type: String,
         required: [true, 'Fullname is required'],
-        // unique: true,
         trim: true,
         index: true,
         maxLength: 50
@@ -48,7 +50,11 @@ const userSchema = new Schema(
     ],
     password: {
         type: String,
-        required: [true, 'Password is required'],
+        required: function(){
+            return this.provider !== 'google';
+        },
+        minLength: 6,
+        select: false
     },
     refreshToken: {
         type: String,
@@ -56,6 +62,11 @@ const userSchema = new Schema(
     isVerified: {
         type: Boolean,
         default: false
+    },
+    provider: {
+        type: String,
+        enum: ['local', 'google'],
+        default: 'local'
     },
 },
 {timestamps: true}
@@ -68,12 +79,6 @@ userSchema.pre("save", async function (next) {
     next()
 })
 
-/* 
-If the password field has been modified (or is new), it generates a salt and then hashes the password using that salt. The hashed password is then stored in place of the plain text password.
-*/
-
-
-//  to check if the provided password matches the hashed password stored in the database.
 userSchema.methods.isPasswordCorrect = async function(password) {
     try {
         return await bcrypt.compare(password, this.password);
