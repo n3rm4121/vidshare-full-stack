@@ -17,12 +17,6 @@ function Comments() {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
   const videoId = useParams().id;
-  //spinner while fetching comments
-   
-  
-
-  
-
   const user = useSelector(state => state.user.user);
 
   useEffect(() => {
@@ -84,7 +78,7 @@ function Comments() {
 
   return (
     <div>
-      <h2 className="text-2xl font-bold mb-4">{comments.length} Comments</h2>
+      <h2 className="text-lg font-bold mb-4">{comments.length} Comments</h2>
       <form className='flex items-center space-x-4 mb-6' onSubmit={handleAddComment}>
         {user?.avatar ? (
           <img src={user.avatar} alt={user.username} className='w-10 h-10 rounded-full' />
