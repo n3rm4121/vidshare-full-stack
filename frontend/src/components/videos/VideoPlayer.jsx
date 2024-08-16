@@ -23,7 +23,7 @@ const VideoPlayer = ({ video, ...props }) => {
 
     cloudinaryRef.current = cloudinary;
     const player = cloudinaryRef.current.videoPlayer(playerRef.current, {
-      cloud_name: 'dbcbgkmui',
+      cloud_name: import.meta.env.VITE_REACT_APP_CLOUD_NAME,
       secure: true,
       controls: true,
       autoplay: true,
