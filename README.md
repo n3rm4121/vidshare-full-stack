@@ -86,6 +86,7 @@ GOOGLE_CLIENT_ID = <yourGoogleClientID>
    ```
 VITE_REACT_APP_BASE_URL = <yourLocalServerURL>
 VITE_REACT_APP_GOOGLE_CLIENT_ID = <yourGoogleClientID>
+VITE_REACT_APP_CLOUD_NAME = <yourCloudinaryCloudName>
 ```
    
 8. Start the frontend development server:
