@@ -3,6 +3,12 @@
 
 VidShare is a full-stack video-sharing platform built with the MERN stack (MongoDB, Express.js, React, Node.js). It allows users to upload, view, and search for videos, as well as interact with other users through notifications and user profiles.
 
+
+DEMO:
+
+https://github.com/user-attachments/assets/aba0f129-412d-43dc-ae50-a052b51f551f
+
+
 ## Features
 
 -   **Email Verification**: Users must verify their email addresses upon signup to be able to login.
