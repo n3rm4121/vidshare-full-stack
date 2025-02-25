@@ -107,7 +107,7 @@ const loginUser = asyncHandler(async (req, res) => {
 
     const user = await User.findOne({
         $or: [{ username }, { email }]
-    });
+    }).select("+password");
 
     if (!user) {
         return res.status(404).json(new ApiResponse(404, {}, "Incorrect Email or Password"));
