@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { login, signUp } from '../features/UserSlice';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import ErrorDialog from '../components/ErrorDialog';
 import SuccessDialog from '../components/SuccessDialog';
 import GoogleSignIn from '../components/GoogleSignIn';
 import Spinner from '../components/Spinner';
+import { IoArrowBack } from 'react-icons/io5';
 
 function SignIn() {
   const [isLogin, setIsLogin] = useState(true);
@@ -75,9 +76,15 @@ function SignIn() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col md:flex-row  bg-gray-200 px-8 md:px-20">
+    <div className="min-h-screen flex flex-col md:flex-row bg-gray-200 px-8 md:px-20 relative">
+      <Link to="/" className="absolute top-4 left-4 flex items-center gap-1 text-gray-600 hover:text-gray-900 transition">
+        <IoArrowBack size={18} />
+        <span className="text-sm font-medium">Back to home</span>
+      </Link>
       <div className="flex flex-col items-center justify-center lg:ml-36 w-full p-4 md:p-6 md:w-1/2">
-        <h1 className="text-6xl font-bold mb-4 text-primary">VidShare</h1>
+        <Link to="/">
+          <h1 className="text-6xl font-bold mb-4 text-primary hover:opacity-80 transition">VidShare</h1>
+        </Link>
         <p className="text-xl text-black">Share your favorite videos with the world.</p>
       </div>
       <div className="flex flex-col justify-center items-center w-full p-4 md:p-6 md:w-1/2 lg:mr-36">
@@ -123,7 +130,14 @@ function SignIn() {
               </div>
             )}
             <div>
-              <label className="block text-sm">Password</label>
+              <div className="flex justify-between items-center">
+                <label className="block text-sm">Password</label>
+                {isLogin && (
+                  <Link to="/forgot-password" className="text-xs text-primary hover:underline">
+                    Forgot password?
+                  </Link>
+                )}
+              </div>
               <input
                 name="password"
                 type="password"

@@ -1,21 +1,23 @@
 import {Router} from "express"
-import { 
-    changeCurrentPassword, 
-    deleteUserAccount, 
-    getCurrentUser, 
-    getUserChannelProfile, 
-    getUserVideos, 
-    getWatchHistory, 
-    loginUser, 
-    logoutUser, 
-    refreshAccessToken, 
-    registerUser, 
-    updateAccountDetails, 
-    updateUserAvatar, 
-    updateUserCoverImage, 
+import {
+    changeCurrentPassword,
+    deleteUserAccount,
+    getCurrentUser,
+    getUserChannelProfile,
+    getUserVideos,
+    getWatchHistory,
+    loginUser,
+    logoutUser,
+    refreshAccessToken,
+    registerUser,
+    updateAccountDetails,
+    updateUserAvatar,
+    updateUserCoverImage,
     updateWatchHistory,
     deleteWatchHistory,
-    verifyToken
+    verifyToken,
+    forgotPassword,
+    resetPassword
 } from "../controllers/user.controller.js";
 
 import { upload } from "../middlewares/multer.middleware.js";
@@ -45,14 +47,15 @@ router.route("/current-user").get(verifyJWT, getCurrentUser);
 
 router.route("/change-password").post(verifyJWT, changeCurrentPassword)
 
-router.route("/c/:username").get(verifyJWT, getUserChannelProfile)
-
+router.route("/c/:username").get(getUserChannelProfile)
 
 router.route("/update-watch-history").post(verifyJWT, updateWatchHistory)
 
-router.route("/c/:username/videos").get(verifyJWT, getUserVideos)
+router.route("/c/:username/videos").get(getUserVideos)
 
 router.route("/delete-account").delete(verifyJWT, deleteUserAccount)
 
 router.route("/verify/:userId/:token").post(verifyToken)
+router.route("/forgot-password").post(forgotPassword)
+router.route("/reset-password/:userId/:token").post(resetPassword)
 export default router

@@ -44,8 +44,8 @@ const googleLogin = asyncHandler(async(req,res) => {
         await user.save();
     }
 
-    const accessToken = user.generateAccessToken();
-    const refreshToken = user.generateRefreshToken();
+    const accessToken = await user.generateAccessToken();
+    const refreshToken = await user.generateRefreshToken();
 
     if(!accessToken){
         throw new Error("Access token could not be generated");

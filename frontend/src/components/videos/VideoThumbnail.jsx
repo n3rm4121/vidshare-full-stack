@@ -18,16 +18,14 @@ function VideoThumbnail({ video }) {
   };
 
   return (
-    <div className="relative w-full rounded-lg overflow-hidden h-auto max-w-full" style={{ paddingBottom: '56.25%' }}>
-    
+    <div className="relative w-full rounded-lg overflow-hidden bg-black" style={{ paddingBottom: '56.25%' }}>
       <video
-        src={video.url} 
-        alt={video.title}
-        className="absolute inset-0 object-cover w-full h-full"
+        src={video.url}
+        className="absolute inset-0 object-contain w-full h-full"
         onMouseOver={handleMouseOver}
         onMouseOut={handleMouseOut}
-        muted // Mute the video
-        loop // Optionally, loop the video
+        muted
+        loop
       />
       <div className="absolute bottom-2 right-2 bg-black bg-opacity-75 text-white text-xs px-2 py-1 rounded">
         {formatDuration(video.duration)}

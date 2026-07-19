@@ -1,5 +1,5 @@
 import mongoose, {Schema} from "mongoose";
-import  jwt  from "jsonwebtoken";
+import { SignJWT } from "jose";
 import bcrypt from 'bcrypt'
 
 const userSchema = new Schema(
@@ -88,31 +88,25 @@ userSchema.methods.isPasswordCorrect = async function(password) {
 }
 
 
-userSchema.methods.generateAccessToken = function(){
-    return jwt.sign(
-    {
-        _id: this._id,
+userSchema.methods.generateAccessToken = async function(){
+    const secret = new TextEncoder().encode(process.env.ACCESS_TOKEN_SECRET);
+    return await new SignJWT({
+        _id: this._id.toString(),
         email: this.email,
         username: this.username,
-        fullname : this.fullname
-    },
-    process.env.ACCESS_TOKEN_SECRET,
-    {
-        expiresIn: process.env.ACCESS_TOKEN_EXPIRY
-    }
-)
+        fullname: this.fullname
+    })
+    .setProtectedHeader({ alg: 'HS256' })
+    .setExpirationTime(process.env.ACCESS_TOKEN_EXPIRY)
+    .sign(secret);
 }
-userSchema.methods.generateRefreshToken = function(){
-    return jwt.sign(
-        {
-            _id: this._id
 
-        },
-        process.env.REFRESH_TOKEN_SECRET,
-        {
-            expiresIn: process.env.REFRESH_TOKEN_EXPIRY
-        }
-    )
+userSchema.methods.generateRefreshToken = async function(){
+    const secret = new TextEncoder().encode(process.env.REFRESH_TOKEN_SECRET);
+    return await new SignJWT({ _id: this._id.toString() })
+    .setProtectedHeader({ alg: 'HS256' })
+    .setExpirationTime(process.env.REFRESH_TOKEN_EXPIRY)
+    .sign(secret);
 }
 
 export const User = mongoose.model("User", userSchema)

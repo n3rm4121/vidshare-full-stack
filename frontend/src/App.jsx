@@ -14,56 +14,47 @@ import Subscriptions from './pages/Subscriptions';
 import WatchHistory from './pages/WatchHistory';
 import LikedVideos from './pages/LikedVideos';
 import EmailVerify from './components/EmailVerify'
+import ForgotPassword from './pages/ForgotPassword'
+import ResetPassword from './pages/ResetPassword'
 
-// ProtectedRoute component
 const ProtectedRoute = ({ children }) => {
-  
   const accessToken = localStorage.getItem('accessToken');
   const location = useLocation();
-
-  if (accessToken) {
-    return children;
-  } else {
-    // Redirect to login and save the current location
-    return <Navigate to="/login" state={{ from: location }} />;
-  }
+  if (accessToken) return children;
+  return <Navigate to="/login" state={{ from: location }} />;
 };
-
 
 const App = () => {
   const dispatch = useDispatch();
-useEffect(() => {
-  const accessToken = localStorage.getItem('accessToken');
-  if (accessToken) {
-    dispatch(getCurrentUser());
-  }
-}, [dispatch]);
+  useEffect(() => {
+    const accessToken = localStorage.getItem('accessToken');
+    if (accessToken) {
+      dispatch(getCurrentUser());
+    }
+  }, [dispatch]);
 
-  const user = useSelector(state => state.user.user);
- // console.log('User:', user);
   return (
     <Router>
       <Routes>
         <Route path="/login" element={<SignIn />} />
-
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset-password/:userId/:token" element={<ResetPassword />} />
         <Route path="user/verify/:userId/:token" element={<EmailVerify />} />
-        
-        <Route path="/" element={
-          <ProtectedRoute>
-            <MainLayout />
-          </ProtectedRoute>
-        }>
+
+        {/* Public layout — everyone can browse */}
+        <Route path="/" element={<MainLayout />}>
           <Route index element={<Home />} />
           <Route path="videos/:id" element={<SinglepageVideo />} />
-          <Route path="c/:username" element={<UserProfile />} />
-          <Route path="me/settings" element={<UserSettings />} />
-          <Route path='search' element={<SearchPage />} />
-          <Route path='me/subscriptions' element={<Subscriptions /> } />
-          <Route path='me/watch-history' element={<WatchHistory />} />
-          <Route path='me/liked-videos' element={<LikedVideos />} />
+          <Route path="c/:username" element={<ProtectedRoute><UserProfile /></ProtectedRoute>} />
+          <Route path="search" element={<SearchPage />} />
+
+          {/* Auth-required pages */}
+          <Route path="me/settings" element={<ProtectedRoute><UserSettings /></ProtectedRoute>} />
+          <Route path="me/subscriptions" element={<ProtectedRoute><Subscriptions /></ProtectedRoute>} />
+          <Route path="me/watch-history" element={<ProtectedRoute><WatchHistory /></ProtectedRoute>} />
+          <Route path="me/liked-videos" element={<ProtectedRoute><LikedVideos /></ProtectedRoute>} />
         </Route>
 
-        {/* Catch-all route for undefined paths */}
         <Route path="*" element={<PageNotFound />} />
       </Routes>
     </Router>

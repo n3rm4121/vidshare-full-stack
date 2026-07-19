@@ -3,7 +3,7 @@ import { ApiError } from '../utils/ApiErrors.js';
 import { User } from '../models/user.model.js';
 import { uploadOnCloudinary } from '../utils/cloudinary.js';
 import { ApiResponse } from '../utils/ApiResponse.js';
-import jwt from 'jsonwebtoken';
+import { jwtVerify } from 'jose';
 import deleteMediaFromCloud from '../utils/deleteMediaFromCloud.js';
 import { Video } from '../models/video.model.js';
 import { isValidObjectId } from 'mongoose';
@@ -14,8 +14,8 @@ import crypto from 'crypto';
 const generateAccessAndRefreshTokens = async (userId) => {
     try {
         const user = await User.findById(userId);
-        const accessToken = user.generateAccessToken();
-        const refreshToken = user.generateRefreshToken();
+        const accessToken = await user.generateAccessToken();
+        const refreshToken = await user.generateRefreshToken();
 
         user.refreshToken = refreshToken;
         await user.save({ validateBeforeSave: false });
@@ -177,10 +177,8 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
     }
 
     try {
-        const decodedToken = jwt.verify(
-            incomingRefreshToken,
-            process.env.REFRESH_TOKEN_SECRET
-        )
+        const secret = new TextEncoder().encode(process.env.REFRESH_TOKEN_SECRET);
+        const { payload: decodedToken } = await jwtVerify(incomingRefreshToken, secret);
 
         const user = await User.findById(decodedToken?._id)
         if (!user) {
@@ -664,4 +662,62 @@ const deleteUserAccount = asyncHandler(async (req, res) => {
     return res.status(200).json({ message: "User account and all related data deleted successfully" });
 })
 
-export { registerUser, loginUser, logoutUser, refreshAccessToken, changeCurrentPassword, getCurrentUser, updateAccountDetails, updateUserAvatar, updateUserCoverImage, getUserChannelProfile, getWatchHistory, updateWatchHistory, getUserVideos, deleteUserAccount, deleteWatchHistory, verifyToken };
+const forgotPassword = asyncHandler(async (req, res) => {
+    const { email } = req.body;
+    if (!email) throw new ApiError(400, "Email is required");
+
+    const user = await User.findOne({ email });
+    if (!user) {
+        // Don't reveal whether the email exists
+        return res.status(200).json(new ApiResponse(200, {}, "If that email is registered, a reset link has been sent"));
+    }
+
+    await Token.deleteMany({ userId: user._id, type: "passwordReset" });
+
+    const resetToken = crypto.randomBytes(32).toString("hex");
+    await new Token({
+        userId: user._id,
+        email: user.email,
+        token: resetToken,
+        type: "passwordReset",
+        expires: Date.now() + 60 * 60 * 1000 // 1 hour
+    }).save();
+
+    const resetLink = `${process.env.CORS_ORIGIN}/reset-password/${user._id}/${resetToken}`;
+
+    await sendEmail({
+        email: user.email,
+        subject: "VidShare — Reset your password",
+        message: `You requested a password reset. Click the link below to set a new password (expires in 1 hour):\n\n${resetLink}\n\nIf you didn't request this, you can ignore this email.`
+    });
+
+    return res.status(200).json(new ApiResponse(200, {}, "If that email is registered, a reset link has been sent"));
+});
+
+const resetPassword = asyncHandler(async (req, res) => {
+    const { userId, token } = req.params;
+    const { password } = req.body;
+
+    if (!password || password.length < 6) throw new ApiError(400, "Password must be at least 6 characters");
+
+    const resetToken = await Token.findOne({
+        userId,
+        token,
+        type: "passwordReset",
+        expires: { $gt: Date.now() }
+    });
+
+    if (!resetToken) throw new ApiError(400, "Invalid or expired reset link");
+
+    const user = await User.findById(userId);
+    if (!user) throw new ApiError(404, "User not found");
+
+    user.password = password;
+    await user.save();
+
+    await Token.deleteOne({ _id: resetToken._id });
+
+    return res.status(200).json(new ApiResponse(200, {}, "Password reset successfully"));
+});
+
+export { registerUser, loginUser, logoutUser, refreshAccessToken, changeCurrentPassword, getCurrentUser, updateAccountDetails, updateUserAvatar, updateUserCoverImage, getUserChannelProfile, getWatchHistory, updateWatchHistory, getUserVideos, deleteUserAccount, deleteWatchHistory, verifyToken, forgotPassword, resetPassword };

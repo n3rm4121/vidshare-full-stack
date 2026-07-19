@@ -3,7 +3,7 @@
 import { User } from "../models/user.model.js";
 import { ApiError } from "../utils/ApiErrors.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
-import jwt from "jsonwebtoken";
+import { jwtVerify } from "jose";
 
 
 export const verifyJWT = asyncHandler(async(req, _, next) => {
@@ -15,7 +15,8 @@ export const verifyJWT = asyncHandler(async(req, _, next) => {
             throw new ApiError(401, "Unauthorized request")
         }
     
-        const decodedToken = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
+        const secret = new TextEncoder().encode(process.env.ACCESS_TOKEN_SECRET);
+        const { payload: decodedToken } = await jwtVerify(token, secret);
 
        // console.log("decoded token: " , decodedToken)
         

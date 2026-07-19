@@ -14,7 +14,7 @@ function CommentLayout({ comment, setComments }) {
   const [content, setContent] = useState(comment.content);
  const toggleRef = useRef();
 
-  const isOwner = user._id === comment?.owner?._id;
+  const isOwner = user?._id === comment?.owner?._id;
 
   // to close the dropdown when clicked outside the component or dropdown itself is clicked again to close it 
   useEffect(() => {

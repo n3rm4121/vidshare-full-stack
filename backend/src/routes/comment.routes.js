@@ -6,18 +6,15 @@ import {
 } from '../controllers/comment.controller.js';
 
 import { Router } from 'express';
-import {verifyJWT} from '../middlewares/auth.middleware.js';
+import { verifyJWT } from '../middlewares/auth.middleware.js';
 const router = Router();
 
-router.use(verifyJWT);
+// public
+router.get('/:videoId', getVideoComments);
 
-router.route('/:videoId').get(getVideoComments)
-
-router.route('/:videoId').post( addComment)
-    
-
-router.route('/:commentId')
-    .delete(deleteComment)
-    .put(updateComment);
+// protected
+router.post('/:videoId', verifyJWT, addComment);
+router.delete('/:commentId', verifyJWT, deleteComment);
+router.put('/:commentId', verifyJWT, updateComment);
 
 export default router;

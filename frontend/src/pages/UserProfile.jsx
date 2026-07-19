@@ -7,6 +7,7 @@ import { FaRegUser } from 'react-icons/fa';
 import Spinner from '../components/Spinner';
 import { fetchUserVideos } from '../features/UserSlice';
 import Avatar from '../components/Avatar';
+import LoginPrompt from '../components/LoginPrompt';
 
 const UserProfile = () => {
     const { username } = useParams();
@@ -17,6 +18,7 @@ const UserProfile = () => {
     const [error, setError] = useState(null);
     const [isSubscribed, setSubscribed] = useState(false);
     const [subscribersCount, setSubscribersCount] = useState(0);
+    const [showLoginPrompt, setShowLoginPrompt] = useState(false);
 
     const dispatch = useDispatch();
     const user = useSelector(state => state.user.user);
@@ -54,7 +56,10 @@ const UserProfile = () => {
     }, [username, dispatch]);
 
     const handleSubscription = async () => {
-        if (!user?._id) return;
+        if (!user?._id) {
+            setShowLoginPrompt(true);
+            return;
+        }
 
         try {
             
@@ -74,6 +79,7 @@ const UserProfile = () => {
 
     return (
         <div className="w-full mx-auto px-10 bg-white shadow-md rounded-md items-center">
+            {showLoginPrompt && <LoginPrompt onClose={() => setShowLoginPrompt(false)} />}
             <div className="relative w-full">
                 {/* Cover Image */}
                 {profile?.coverImage ? (

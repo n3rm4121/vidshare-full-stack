@@ -2,7 +2,7 @@ import React, { useState} from 'react';
 import { NavLink } from 'react-router-dom';
 import VideoThumbnail from './VideoThumbnail';
 import moment from 'moment';
-import { LuDot, LuMoreVertical } from "react-icons/lu";
+import { LuDot, LuEllipsisVertical } from "react-icons/lu";
 import { incrementViewCount, updateWatchHistory } from '../../utils/api';
 import { useDispatch, useSelector } from 'react-redux';
 import ConfirmationDialog from '../ConfirmationDialog';
@@ -74,7 +74,7 @@ const VideoCard = ({ video }) => {
     {video.owner === user?._id && (
         <div className="absolute bottom-16 right-1">
             <button onClick={(e) => { e.stopPropagation(); setMenuOpen(!menuOpen); }} className="focus:outline-none hover:bg-gray-200 rounded-full p-2">
-                <LuMoreVertical className="text-gray-600" />
+                <LuEllipsisVertical className="text-gray-600" />
             </button>
             {menuOpen && (
                 <div className="ml-auto absolute right-0 w-48 bg-white border border-gray-200 rounded-md shadow-lg">
