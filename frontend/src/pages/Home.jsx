@@ -16,7 +16,7 @@ const Home = () => {
     dispatch(fetchAllVideos());
   }, [dispatch]);
 
-  const homeVideos = videos?.filter(video => video.owner?._id !== user._id);
+  const homeVideos = videos?.filter(video => video.owner?._id !== user?._id) ?? [];
 
   return (
     <div className={`container p-4`}>
